@@ -5,13 +5,20 @@ import {
   CircleHelp,
   Settings,
 } from "lucide-react";
+import { useState } from "react";
+import Sidebar from "./Sidebar";
+
 
 const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
+    <>
+   
     <header className="h-16 border-b bg-white flex items-center justify-between px-6 shadow-sm">
       {/* Left Section */}
       <div className="flex items-center gap-5">
-        <button className="text-gray-600 hover:text-black">
+        <button className="flex items-center gap-3 p-3 rounded-lg bg-blue-600 text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           <Menu size={22} />
         </button>
 
@@ -64,6 +71,9 @@ const Navbar = () => {
         />
       </div>
     </header>
+    {/* Sidebar */}
+      <Sidebar isOpen={isMenuOpen} />
+      </>
   );
 };
 

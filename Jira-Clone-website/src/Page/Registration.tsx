@@ -4,7 +4,7 @@ import Picutre1 from "../assets/picture1.jpg";
 
 const Registration = () => {
   return (
-    <section className="min-h-screen bg-[#f4f5f7] flex items-center justify-center px-6 py-12">
+    <section className="min-h-screen bg-[#f4f5f7] flex items-center justify-center px-6 py-9">
       <div className="max-w-5xl w-full grid md:grid-cols-2 gap-16 items-center">
         {/* Left Side */}
         <div className="hidden md:flex flex-col justify-center">
@@ -28,13 +28,13 @@ const Registration = () => {
         </div>
 
         {/* Right Side */}
-        <div className="bg-white rounded-2xl shadow-xl p-10 max-w-md w-full mx-auto">
+        <div className="bg-white rounded-2xl shadow-xl p-7 max-w-md w-full mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-[#172B4D] mb-7">
             Create Your Account
           </h2>
           {/* Full Name */}
-          <div className="mb-6">
-            <label className="font-semibold text-gray-700 block mb-2">
+          <div className="mb-5">
+            <label className="font-semibold text-gray-700 block mb-1">
               Full Name
             </label>
 
@@ -47,8 +47,8 @@ const Registration = () => {
 
           {/* Email */}
 
-          <div className="mb-6">
-            <label className="font-semibold text-gray-700 block mb-2">
+          <div className="mb-5">
+            <label className="font-semibold text-gray-700 block mb-1">
               Email address
             </label>
 
@@ -62,7 +62,7 @@ const Registration = () => {
           {/* Password */}
 
           <div className="mb-5">
-            <label className="font-semibold text-gray-700 block mb-2">
+            <label className="font-semibold text-gray-700 block mb-1">
               Password
             </label>
 
@@ -83,7 +83,7 @@ const Registration = () => {
           {/*Confirm Password */}
 
           <div className="mb-5">
-            <label className="font-semibold text-gray-700 block mb-2">
+            <label className="font-semibold text-gray-700 block mb-1">
               Confirm Password
             </label>
             <div className="relative">
@@ -107,7 +107,7 @@ const Registration = () => {
 
           {/* Register */}
 
-          <p className="text-center mt-8 text-gray-600">
+          <p className="text-center mt-5 text-gray-600">
             Already have an account?{" "}
             <Link
               to="/login"

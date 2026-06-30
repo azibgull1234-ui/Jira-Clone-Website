@@ -2,7 +2,10 @@ import Navbar from "../Layout/Navbar";
 
 const Home = () => {
   return (
-    <Navbar/>
+    <>
+     <Navbar/>
+    </>
+   
   );
 };
 
