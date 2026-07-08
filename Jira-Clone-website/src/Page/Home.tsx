@@ -1,47 +1,49 @@
 import Navbar from "../Layout/Navbar";
+import { useState } from "react";
 import {
-  Smartphone,
-  Globe,
-  Megaphone,
-  Users,
   UserRound,
   MessageSquareMore,
   ClipboardPlus,
   ArrowRight,
+  CheckCircle2,
+  Clock,
+  AlertCircle,
+  ListTodo,
 } from "lucide-react";
 import "react-calendar/dist/Calendar.css";
 import Calendar from "react-calendar";
 
-const card = [
+const stats = [
   {
-    title: "Mobile App",
-    subtitle: "Software project",
-    icon: Smartphone,
-    bg: "bg-blue-100",
+    icon: AlertCircle,
+    number: 12,
+    label: "Open Issues",
     color: "text-blue-600",
+    bgColor: "bg-blue-100",
   },
   {
-    title: "Website Revamp",
-    subtitle: "Business project",
-    icon: Globe,
-    bg: "bg-purple-100",
-    color: "text-purple-600",
-  },
-  {
-    title: "Marketing",
-    subtitle: "Business project",
-    icon: Megaphone,
-    bg: "bg-orange-100",
+    icon: Clock,
+    number: 5,
+    label: "In Progress",
     color: "text-orange-600",
+    bgColor: "bg-orange-100",
   },
   {
-    title: "HR Management",
-    subtitle: "Business project",
-    icon: Users,
-    bg: "bg-green-100",
+    icon: CheckCircle2,
+    number: 3,
+    label: "Done Today",
     color: "text-green-600",
+    bgColor: "bg-green-100",
+  },
+  {
+    icon: ListTodo,
+    number: 24,
+    label: "All Issues",
+    color: "text-purple-600",
+    bgColor: "bg-purple-100",
   },
 ];
+
 
 const recentIssues = [
   {
@@ -132,42 +134,44 @@ const activities = [
 ];
 
 const Home = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(true);
+
   return (
     <>
-      <Navbar />
-      <section className="space-y-6">
+      <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+      <section className={`space-y-6 pb-10 p-6 transition-all duration-300 ${isMenuOpen ? "ml-64" : "ml-0"}`}>
         {/* Heading */}
         <div>
-          <h1 className="text-3xl font-bold text-slate-800">
-            Good morning, Azib
+          <h1 className="text-4xl font-bold text-gray-900">
+            Good morning, Azib 
           </h1>
           <p className="text-gray-500 mt-1">
             Here's what's happening with your work today.
           </p>
         </div>
-        {/* Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {card.map((project, index) => {
-            const Icon = project.icon;
 
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {stats.map((stat, index) => {
+            const Icon = stat.icon;
             return (
               <div
                 key={index}
-                className="border rounded-xl p-5 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer bg-white"
+                className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer border border-gray-100"
               >
-                <div className="flex items-center gap-4">
-                  <div
-                    className={`w-12 h-12 rounded-lg flex items-center justify-center ${project.bg}`}
-                  >
-                    <Icon className={project.color} size={24} />
-                  </div>
-
+                <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="font-semibold text-gray-800">
-                      {project.title}
-                    </h3>
-
-                    <p className="text-sm text-gray-500">{project.subtitle}</p>
+                    <p className="text-gray-600 text-sm font-medium">
+                      {stat.label}
+                    </p>
+                    <h2 className="text-4xl font-bold text-gray-900 mt-2">
+                      {stat.number}
+                    </h2>
+                  </div>
+                  <div
+                    className={`w-12 h-12 rounded-lg flex items-center justify-center ${stat.bgColor}`}
+                  >
+                    <Icon className={`${stat.color}`} size={24} />
                   </div>
                 </div>
               </div>
@@ -175,135 +179,147 @@ const Home = () => {
           })}
         </div>
 
-        {/*Progress */}
-        <div className="bg-white border rounded-xl shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-slate-800 mb-5">
-            My Recent Issues
-          </h2>
+        {/* Main Content Grid - Issues and Projects */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          {/* Recent Issues */}
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+              <h2 className="text-lg font-semibold text-gray-900 mb-5">
+                My Recent Issues
+              </h2>
 
-          <div className="space-y-4">
-            {recentIssues.map((issue, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between hover:bg-slate-50 px-2 py-2 rounded-lg transition"
-              >
-                <div className="flex items-center gap-4">
-                  <span
-                    className={`text-white text-[10px] font-bold px-2 py-1 rounded ${issue.typeColor}`}
+              <div className="space-y-4">
+                {recentIssues.map((issue, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between hover:bg-gray-50 px-3 py-3 rounded-lg transition"
                   >
-                    {issue.type}
-                  </span>
+                    <div className="flex items-center gap-4 flex-1">
+                      <span
+                        className={`text-white text-[10px] font-bold px-2 py-1 rounded-md ${issue.typeColor}`}
+                      >
+                        {issue.type}
+                      </span>
 
-                  <span className="text-sm text-gray-500 font-medium">
-                    {issue.id}
-                  </span>
+                      <span className="text-sm text-gray-600 font-medium min-w-fit">
+                        {issue.id}
+                      </span>
 
-                  <h3 className="text-sm font-medium text-slate-700">
-                    {issue.title}
-                  </h3>
-                </div>
-
-                <span
-                  className={`text-xs font-semibold px-3 py-1 rounded-full ${issue.statusColor}`}
-                >
-                  {issue.status}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          <button className="mt-6 text-blue-600 font-medium text-sm hover:underline">
-            View all issues →
-          </button>
-        </div>
-        {/* Projects */}
-        <div className="bg-white border rounded-xl shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-slate-800 mb-6">
-            My Projects
-          </h2>
-
-          <div className="space-y-6">
-            {projects.map((project, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-4 hover:bg-slate-50 p-2 rounded-lg transition-all cursor-pointer"
-              >
-                {/* Project Logo */}
-                <div
-                  className={`w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold text-sm ${project.bg}`}
-                >
-                  {project.initials}
-                </div>
-
-                {/* Project Info */}
-                <div>
-                  <h3 className="font-semibold text-slate-800">
-                    {project.title}
-                  </h3>
-
-                  <p className="text-sm text-gray-500">{project.subtitle}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <button className="mt-8 text-blue-600 font-medium text-sm hover:underline flex items-center gap-1">
-            View all projects
-            <span>→</span>
-          </button>
-        </div>
-        {/* Activity */}
-        <div className="bg-white border rounded-xl shadow-sm p-6">
-          <h2 className="text-xl font-semibold text-slate-800 mb-6">
-            Activity
-          </h2>
-
-          <div className="space-y-6">
-            {activities.map((activity, index) => {
-              const Icon = activity.icon;
-
-              return (
-                <div key={index} className="flex justify-between items-start">
-                  <div className="flex gap-4">
-                    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
-                      <Icon size={20} className="text-slate-700" />
+                      <h3 className="text-sm font-medium text-gray-800">
+                        {issue.title}
+                      </h3>
                     </div>
 
-                    <div>
-                      <h3 className="font-semibold text-slate-800">
-                        {activity.title}
-                      </h3>
+                    <span
+                      className={`text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap ml-2 ${issue.statusColor}`}
+                    >
+                      {issue.status}
+                    </span>
+                  </div>
+                ))}
+              </div>
 
-                      <p className="text-gray-500 mt-1">
-                        <span className="font-medium">{activity.project}</span>{" "}
-                        {activity.description}
-                      </p>
+              <button className="mt-6 text-blue-600 font-medium text-sm hover:text-blue-700 flex items-center gap-1">
+                View all issues
+                <ArrowRight size={16} />
+              </button>
+            </div>
+
+            {/* Projects */}
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+              <h2 className="text-lg font-semibold text-gray-900 mb-6">
+                My Projects
+              </h2>
+
+              <div className="space-y-4">
+                {projects.map((project, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-4 hover:bg-gray-50 p-3 rounded-lg transition-all cursor-pointer"
+                  >
+                    {/* Project Logo */}
+                    <div
+                      className={`w-14 h-14 rounded-lg flex items-center justify-center text-white font-bold text-lg flex-shrink-0 ${project.bg}`}
+                    >
+                      {project.initials}
+                    </div>
+
+                    {/* Project Info */}
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-gray-900">
+                        {project.title}
+                      </h3>
+                      <p className="text-sm text-gray-500">{project.subtitle}</p>
                     </div>
                   </div>
+                ))}
+              </div>
 
-                  <span className="text-sm text-gray-400 whitespace-nowrap">
-                    {activity.time}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-          <button className="mt-8 flex items-center gap-2 text-blue-600 font-medium hover:underline">
-            View all activity
-            <ArrowRight size={16} />
-          </button>
+              <button className="mt-6 text-blue-600 font-medium text-sm hover:text-blue-700 flex items-center gap-1">
+                View all projects
+                <ArrowRight size={16} />
+              </button>
+            </div>
         </div>
-        {/* Calendar */}
-        <div className="bg-white border rounded-xl shadow-sm p-6 mt-5">
-          <h2 className="text-xl font-semibold mb-5">Calendar</h2>
 
-          <Calendar
-            className="w-full border-none"
-            value={new Date(2025, 4, 14)} // creates a JavaScript Date object
-          />
+        {/* Activity and Calendar Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            {/* Activity */}
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+              <h2 className="text-lg font-semibold text-gray-900 mb-6">
+                Activity
+              </h2>
+              <div className="space-y-5">
+                {activities.map((activity, index) => {
+                  const Icon = activity.icon;
+
+                  return (
+                    <div key={index} className="flex gap-4">
+                      <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+                        <Icon size={18} className="text-gray-700" />
+                      </div>
+
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-gray-800 text-sm">
+                          {activity.title}
+                        </h3>
+
+                        <p className="text-gray-600 mt-1 text-xs">
+                          <span className="font-medium text-gray-900">
+                            {activity.project}
+                          </span>{" "}
+                          {activity.description}
+                        </p>
+
+                        <p className="text-xs text-gray-400 mt-2">
+                          {activity.time}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <button className="mt-6 text-blue-600 font-medium text-sm hover:text-blue-700 flex items-center gap-1">
+                View all activity
+                <ArrowRight size={16} />
+              </button>
+            </div>
+
+            {/* Calendar */}
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+              <h2 className="text-lg font-semibold text-gray-900 mb-5">
+                Calendar
+              </h2>
+
+              <Calendar
+                className="w-full border-none"
+                value={new Date(2025, 4, 14)}
+              />
+            </div>
         </div>
       </section>
     </>
   );
 };
+
 
 export default Home;

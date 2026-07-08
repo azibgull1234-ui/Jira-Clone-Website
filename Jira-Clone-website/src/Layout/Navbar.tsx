@@ -5,12 +5,14 @@ import {
   CircleHelp,
   Settings,
 } from "lucide-react";
-import { useState } from "react";
 import Sidebar from "./Sidebar";
 
+interface NavbarProps {
+  isMenuOpen: boolean;
+  setIsMenuOpen: (value: boolean) => void;
+}
 
-const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+const Navbar = ({ isMenuOpen, setIsMenuOpen }: NavbarProps) => {
 
   return (
     <>

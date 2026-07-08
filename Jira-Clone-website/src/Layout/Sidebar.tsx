@@ -8,6 +8,7 @@ import {
   Users,
   Settings,
 } from "lucide-react";
+
 interface SidebarProps {
   isOpen: boolean;
 }
@@ -15,18 +16,16 @@ interface SidebarProps {
 const Sidebar = ({ isOpen }: SidebarProps) => {
   return (
     <div
-      className={`fixed top-16 left-0 bg-[#172B4D] text-white w-64 min-h-screen p-5 transition-transform duration-300 ${
+      className={`fixed top-16 left-0 bg-linear-to-b from-blue-600 to-teal-950 text-white w-64 min-h-screen p-6 transition-transform duration-300 ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
-      <h1 className="text-2xl font-bold mb-5">Sidebar</h1>
-
-      <ul className="space-y-2 mt-6">
+      <ul className="space-y-1 mt-4">
 
   <li>
     <a
       href="#"
-      className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#344563] hover:text-white transition duration-200"
+      className="flex items-center gap-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition duration-200 font-medium"
     >
       <LayoutDashboard size={20} />
       <span>Dashboard</span>
@@ -36,7 +35,7 @@ const Sidebar = ({ isOpen }: SidebarProps) => {
   <li>
     <a
       href="#"
-     className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#344563] hover:text-white transition duration-200"
+     className="flex items-center gap-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition duration-200 font-medium"
     >
       <CircleCheckBig size={20} />
       <span>My Issues</span>
@@ -46,7 +45,7 @@ const Sidebar = ({ isOpen }: SidebarProps) => {
   <li>
     <a
       href="#"
-      className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#344563] hover:text-white transition duration-200"
+      className="flex items-center gap-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition duration-200 font-medium"
     >
       <FolderKanban size={20} />
       <span>Projects</span>
@@ -56,7 +55,7 @@ const Sidebar = ({ isOpen }: SidebarProps) => {
   <li>
     <a
       href="#"
-      className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#344563] hover:text-white transition duration-200"
+      className="flex items-center gap-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition duration-200 font-medium"
     >
       <KanbanSquare size={20} />
       <span>Boards</span>
@@ -66,7 +65,7 @@ const Sidebar = ({ isOpen }: SidebarProps) => {
   <li>
     <a
       href="#"
-      className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#344563] hover:text-white transition duration-200"
+      className="flex items-center gap-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition duration-200 font-medium"
     >
       <ListTodo size={20} />
       <span>Backlog</span>
@@ -76,7 +75,7 @@ const Sidebar = ({ isOpen }: SidebarProps) => {
   <li>
     <a
       href="#"
-      className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#344563] hover:text-white transition duration-200"
+      className="flex items-center gap-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition duration-200 font-medium"
     >
       <BarChart3 size={20} />
       <span>Reports</span>
@@ -86,7 +85,7 @@ const Sidebar = ({ isOpen }: SidebarProps) => {
   <li>
     <a
       href="#"
-      className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#344563] hover:text-white transition duration-200"
+      className="flex items-center gap-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition duration-200 font-medium"
     >
       <Users size={20} />
       <span>People</span>
@@ -96,7 +95,7 @@ const Sidebar = ({ isOpen }: SidebarProps) => {
   <li>
     <a
       href="#"
-      className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#344563] hover:text-white transition duration-200"
+      className="flex items-center gap-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition duration-200 font-medium"
     >
       <Settings size={20} />
       <span>Settings</span>
