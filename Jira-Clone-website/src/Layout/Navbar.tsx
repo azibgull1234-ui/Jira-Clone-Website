@@ -17,7 +17,7 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen }: NavbarProps) => {
   return (
     <>
    
-    <header className="h-16 border-b bg-white flex items-center justify-between px-6 shadow-sm">
+    <header className="h-16 border-b bg-white flex items-center justify-between px-6 shadow-sm fixed top-0 left-0 right-0 z-50">
       {/* Left Section */}
       <div className="flex items-center gap-5">
         <button className="flex items-center gap-3 p-3 rounded-lg bg-blue-600 text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>

@@ -139,7 +139,7 @@ const Home = () => {
   return (
     <>
       <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-      <section className={`space-y-6 pb-10 p-6 transition-all duration-300 ${isMenuOpen ? "ml-64" : "ml-0"}`}>
+      <section className={`space-y-6 pb-10 p-6 pt-20 transition-all duration-300 ${isMenuOpen ? "ml-64" : "ml-0"}`}>
         {/* Heading */}
         <div>
           <h1 className="text-4xl font-bold text-gray-900">
