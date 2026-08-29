@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
-import Picutre1 from "../assets/picture1.jpg";
+import Picutre1 from "../../assets/picture1.jpg";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { registerUser } from "../Services/authService";
+import { useAuth } from "../../context/AuthContext";
 
 interface FormData {
   fullName: string;
@@ -21,7 +21,7 @@ const Registration = () => {
   } = useForm<FormData>();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
+  const { register: registerAccount, loading, error, clearError } = useAuth();
   const navigate = useNavigate();
 
   const password = watch("password") ?? "";
@@ -51,18 +51,13 @@ const Registration = () => {
   const passwordStrength = getPasswordStrength(password);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    setSubmitError(null);
+    clearError();
 
     try {
-      await registerUser({
-        fullName: data.fullName,
-        email: data.email,
-        password: data.password,
-      });
-
+      await registerAccount(data.fullName, data.email, data.password);
       navigate("/login", { replace: true });
-    } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : "Registration failed");
+    } catch {
+      // Error is stored on AuthContext.
     }
   };
   return (
@@ -227,15 +222,16 @@ const Registration = () => {
                 {errors.confirmPassword?.message}
               </p>
             </div>
-            {submitError ? (
-              <p className="text-red-500 text-sm mt-1">{submitError}</p>
+            {error ? (
+              <p className="text-red-500 text-sm mt-1">{error}</p>
             ) : null}
 
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg text-base font-semibold transition"
+              disabled={loading}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg text-base font-semibold transition disabled:opacity-70"
             >
-              Register
+              {loading ? "Creating account..." : "Register"}
             </button>
           </form>
           {/* Login */}

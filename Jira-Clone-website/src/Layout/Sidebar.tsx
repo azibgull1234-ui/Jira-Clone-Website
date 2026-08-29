@@ -1,109 +1,83 @@
 import {
-  LayoutDashboard,
+  BarChart3,
   CircleCheckBig,
   FolderKanban,
   KanbanSquare,
+  LayoutDashboard,
   ListTodo,
-  BarChart3,
-  Users,
+  LogOut,
   Settings,
+  Users,
 } from "lucide-react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 interface SidebarProps {
   isOpen: boolean;
+  onNavigate?: () => void;
 }
 
-const Sidebar = ({ isOpen }: SidebarProps) => {
+const navItems = [
+  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/issues", label: "My Issues", icon: CircleCheckBig },
+  { to: "/projects", label: "Projects", icon: FolderKanban },
+  { to: "/boards", label: "Boards", icon: KanbanSquare },
+  { to: "/backlog", label: "Backlog", icon: ListTodo },
+  { to: "/reports", label: "Reports", icon: BarChart3 },
+  { to: "/people", label: "People", icon: Users },
+  { to: "/settings", label: "Settings", icon: Settings },
+];
+
+const Sidebar = ({ isOpen, onNavigate }: SidebarProps) => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    onNavigate?.();
+    logout();
+    navigate("/login", { replace: true });
+  };
+
   return (
-    <div
-      className={`fixed top-16 left-0 bg-linear-to-b from-blue-600 to-teal-950 text-white w-64 min-h-screen p-6 transition-transform duration-300 ${
+    <aside
+      id="app-sidebar"
+      className={`fixed top-16 left-0 z-40 flex h-[calc(100vh-4rem)] w-64 flex-col overflow-y-auto bg-linear-to-b from-blue-600 to-teal-950 p-4 text-white transition-transform duration-300 md:p-6 ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
-      <ul className="space-y-1 mt-4">
+      <nav aria-label="Main" className="flex-1">
+        <ul className="mt-2 space-y-1">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <li key={item.to}>
+                <NavLink
+                  to={item.to}
+                  onClick={onNavigate}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 rounded-lg p-3 font-medium transition duration-200 ${
+                      isActive ? "bg-white/20" : "hover:bg-white/15"
+                    }`
+                  }
+                >
+                  <Icon size={20} />
+                  <span>{item.label}</span>
+                </NavLink>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
 
-  <li>
-    <a
-      href="#"
-      className="flex items-center gap-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition duration-200 font-medium"
-    >
-      <LayoutDashboard size={20} />
-      <span>Dashboard</span>
-    </a>
-  </li>
-
-  <li>
-    <a
-      href="#"
-     className="flex items-center gap-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition duration-200 font-medium"
-    >
-      <CircleCheckBig size={20} />
-      <span>My Issues</span>
-    </a>
-  </li>
-
-  <li>
-    <a
-      href="#"
-      className="flex items-center gap-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition duration-200 font-medium"
-    >
-      <FolderKanban size={20} />
-      <span>Projects</span>
-    </a>
-  </li>
-
-  <li>
-    <a
-      href="#"
-      className="flex items-center gap-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition duration-200 font-medium"
-    >
-      <KanbanSquare size={20} />
-      <span>Boards</span>
-    </a>
-  </li>
-
-  <li>
-    <a
-      href="#"
-      className="flex items-center gap-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition duration-200 font-medium"
-    >
-      <ListTodo size={20} />
-      <span>Backlog</span>
-    </a>
-  </li>
-
-  <li>
-    <a
-      href="#"
-      className="flex items-center gap-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition duration-200 font-medium"
-    >
-      <BarChart3 size={20} />
-      <span>Reports</span>
-    </a>
-  </li>
-
-  <li>
-    <a
-      href="#"
-      className="flex items-center gap-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition duration-200 font-medium"
-    >
-      <Users size={20} />
-      <span>People</span>
-    </a>
-  </li>
-
-  <li>
-    <a
-      href="#"
-      className="flex items-center gap-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition duration-200 font-medium"
-    >
-      <Settings size={20} />
-      <span>Settings</span>
-    </a>
-  </li>
-
-</ul>
-    </div>
+      <button
+        type="button"
+        onClick={handleLogout}
+        className="mt-4 flex w-full items-center gap-3 rounded-lg p-3 font-medium hover:bg-white/15"
+      >
+        <LogOut size={20} />
+        <span>Logout</span>
+      </button>
+    </aside>
   );
 };
 

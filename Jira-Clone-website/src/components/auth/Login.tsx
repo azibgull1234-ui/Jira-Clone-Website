@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import Picutre from "../assets/picture.jpg";
-import { clearError, login } from "../Store/authSlice";
-import type { AppDispatch, RootState } from "../Store/store";
+import Picutre from "../../assets/picture.jpg";
+import { useAuth } from "../../context/AuthContext";
 
 interface FormData {
   email: string;
   password: string;
+  rememberMe: boolean;
 }
 
 const Login = () => {
@@ -17,24 +16,34 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormData>({
+    defaultValues: { rememberMe: true },
+  });
   const [showPassword, setShowPassword] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { isAuthenticated, loading, error } = useSelector((state: RootState) => state.auth);
+  const location = useLocation();
+  const { isAuthenticated, loading, error, login, clearError } = useAuth();
+  const from =
+    (location.state as { from?: { pathname: string } } | null)?.from?.pathname ||
+    "/dashboard";
+
+  useEffect(() => {
+    clearError();
+  }, [clearError]);
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/home", { replace: true });
+      navigate(from, { replace: true });
     }
-  }, [isAuthenticated, navigate]);
+  }, [from, isAuthenticated, navigate]);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    dispatch(clearError());
-    const resultAction = await dispatch(login(data));
-
-    if (login.fulfilled.match(resultAction)) {
-      navigate("/home", { replace: true });
+    clearError();
+    try {
+      await login(data.email, data.password, data.rememberMe);
+      navigate(from, { replace: true });
+    } catch {
+      // Error is stored on AuthContext.
     }
   };
 
@@ -130,7 +139,7 @@ const Login = () => {
             {/* Remember */}
             <div className="flex justify-between items-center mb-8">
               <label className="flex items-center gap-2 text-gray-600">
-                <input type="checkbox" />
+                <input type="checkbox" {...register("rememberMe")} />
                 Remember me
               </label>
 

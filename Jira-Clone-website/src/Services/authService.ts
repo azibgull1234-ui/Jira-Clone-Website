@@ -1,10 +1,19 @@
+export interface AuthUser {
+  id: string;
+  email: string;
+  fullName: string;
+}
+
 export interface LoginResponse {
   success: boolean;
   token: string;
-  user: {
-    email: string;
-  };
+  user: AuthUser;
   message: string;
+}
+
+export interface AuthSession {
+  token: string;
+  user: AuthUser;
 }
 
 interface RegisteredUser {
@@ -14,6 +23,7 @@ interface RegisteredUser {
 }
 
 const USERS_STORAGE_KEY = "registeredUsers";
+const SESSION_KEY = "authSession";
 
 const getStoredUsers = (): RegisteredUser[] => {
   if (typeof window === "undefined") {
@@ -68,7 +78,11 @@ export const loginUser = async (email: string, password: string): Promise<LoginR
     return {
       success: true,
       token: `mock-jwt-token-${matchedUser.email}`,
-      user: { email: matchedUser.email },
+      user: {
+        id: matchedUser.email,
+        email: matchedUser.email,
+        fullName: matchedUser.fullName,
+      },
       message: "Login successful",
     };
   }
@@ -77,7 +91,7 @@ export const loginUser = async (email: string, password: string): Promise<LoginR
     return {
       success: true,
       token: "mock-jwt-token-admin",
-      user: { email },
+      user: { id: email, email, fullName: "Admin User" },
       message: "Login successful",
     };
   }
@@ -86,10 +100,85 @@ export const loginUser = async (email: string, password: string): Promise<LoginR
     return {
       success: true,
       token: "mock-jwt-token-user",
-      user: { email },
+      user: { id: email, email, fullName: "Demo User" },
       message: "Login successful",
     };
   }
 
   throw new Error("Invalid email or password");
+};
+
+export const requestPasswordReset = async (email: string): Promise<void> => {
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
+  if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+    throw new Error("Enter a valid email address");
+  }
+};
+
+const parseSession = (raw: string | null): AuthSession | null => {
+  if (!raw) {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(raw) as AuthSession;
+    if (parsed?.token && parsed?.user?.email) {
+      return parsed;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+};
+
+export const getStoredSession = (): AuthSession | null => {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const session =
+    parseSession(localStorage.getItem(SESSION_KEY)) ??
+    parseSession(sessionStorage.getItem(SESSION_KEY));
+
+  if (session) {
+    return session;
+  }
+
+  const token = localStorage.getItem("token");
+  const email = localStorage.getItem("userEmail");
+  if (token && email) {
+    return {
+      token,
+      user: { id: email, email, fullName: email.split("@")[0] },
+    };
+  }
+
+  return null;
+};
+
+export const persistSession = (session: AuthSession, rememberMe: boolean) => {
+  clearSession();
+  const storage = rememberMe ? localStorage : sessionStorage;
+  storage.setItem(SESSION_KEY, JSON.stringify(session));
+  storage.setItem("token", session.token);
+  storage.setItem("userEmail", session.user.email);
+};
+
+export const updateStoredUser = (user: AuthUser) => {
+  const session = getStoredSession();
+  if (!session) {
+    return;
+  }
+  const rememberMe = Boolean(localStorage.getItem(SESSION_KEY));
+  persistSession({ ...session, user }, rememberMe);
+};
+
+export const clearSession = () => {
+  localStorage.removeItem(SESSION_KEY);
+  sessionStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem("token");
+  sessionStorage.removeItem("token");
+  localStorage.removeItem("userEmail");
+  sessionStorage.removeItem("userEmail");
 };

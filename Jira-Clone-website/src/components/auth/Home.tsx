@@ -1,4 +1,4 @@
-import Navbar from "../Layout/Navbar";
+import Navbar from "../../Layout/Navbar";
 import { useState } from "react";
 import {
   UserRound,
